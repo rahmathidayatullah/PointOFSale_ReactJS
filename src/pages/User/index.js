@@ -3,14 +3,14 @@ import Header from './components/Header'
 // import TopToggle from './components/TopToggle'
 import Close from '../../assets/img/close.svg'
 import Toggle from '../../assets/img/toggle.svg'
-import TopToggle from '../Home/components/TopToggle'
+import TopToggle from '../User/components/TopToggle'
 
-import SideToggle from '../Home/components/SideToggle'
+import SideToggle from '../User/components/SideToggle'
 
 import Card from './components/Card'
 // import SideToggle from './components/SideToggle'
 
-export default function Home() {
+export default function User() {
   const [toggle, setToggle] = useState(true)
   // console.log(toggle)
 
@@ -20,8 +20,6 @@ export default function Home() {
   return (
     <div className="pl-20 relative">
       <SideToggle />
-      {/* <div className="overlay" onClick={() => setToggle(true)}></div> */}
-      {/* <TopToggle /> */}
       <Header
         TopElmnt={
           <div>
@@ -41,7 +39,7 @@ export default function Home() {
           </div>
         }
       />
-      <div className="relative top-40 grid grid-cols-4 gap-4">
+      <div className="relative top-40 grid grid-cols-4 gap-4 mt-14">
         <Card />
         <Card />
         <Card />

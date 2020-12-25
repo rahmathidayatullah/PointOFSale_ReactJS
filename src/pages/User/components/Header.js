@@ -21,8 +21,8 @@ export default function Header({ TopElmnt }) {
   // }
 
   return (
-    <div className="bg-header fixed z-10 top-0 pb-10">
-      <div className="flex flex-row items-center justify-between  z-20">
+    <div className="bg-header fixed z-10 top-0 left-0 w-full px-20 pt-6">
+      <div className="flex flex-row items-center justify-between z-20">
         <div className="flex flex-row items-center  top-2">
           <img src={Brand} />
           <p className="mb-4 text-5xl font-light ml-3">

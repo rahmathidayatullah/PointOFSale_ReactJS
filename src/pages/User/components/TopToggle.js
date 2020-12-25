@@ -8,7 +8,7 @@ export default function TopToggle() {
   return (
     <div
       className="bg-white shadow rounded p-6 absolute z-20"
-      style={{ top: '67px', right: '-5px' }}
+      style={{ top: '137px', right: '48px' }}
     >
       <div className="flex flex-row items-center justify-between border-b pb-3 w-96">
         <div className="w-20 h-20 rounded-full overflow-hidden">

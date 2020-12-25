@@ -79,4 +79,14 @@ transition: 0.3s ease-in-out;
     transform: translate(-50%,-50%);
 }
 
+/* admin */
+
+.list-side {
+    border-right: 4px solid transparent;
+}
+
+.list-side:hover{
+border-right: 4px solid orange;
+}
+
 

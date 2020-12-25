@@ -1,5 +1,6 @@
-import { HashRouter as Router, Route, Switch } from 'react-router-dom'
-import Home from './pages/Home'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import Home from './pages/User'
+import Admin from './pages/Admin'
 import './styles/tailwind.css'
 import './styles/index.css'
 
@@ -8,6 +9,7 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
+          <Route path="/admin" component={Admin} />
           <Route path="/" component={Home} />
         </Switch>
       </Router>

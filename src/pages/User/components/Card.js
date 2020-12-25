@@ -4,7 +4,7 @@ import Shop from '../../../assets/img/shop_card.svg'
 
 export default function Card() {
   return (
-    <div className="bg-white border-md shadow-lg p-4 flex flex-col w-64 min-w-16  mt-4">
+    <div className="bg-white border-md shadow-lg p-4 flex flex-col w-64 min-w-16  ">
       <div className="w-full h-48">
         <img src={ImageCard} className="w-full h-full" />
       </div>
