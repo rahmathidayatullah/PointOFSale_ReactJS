@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+color:  #6e6e6e !important;
+background: #f7f7f7;
+transition: 0.3s ease-in-out;
+}
+.bg-header{
+    background-color: #f7f7f7;
+}
+
+.bg-side{
+    background-color: #ebebeb;
+}
+.bg-subSide{
+    background-color: #dedede;
+}
+
+.scroll-hidden::-webkit-scrollbar{
+    display: none !important;
+}
+.text-grey{
+    color: #6e6e6e !important;
+}
+
+.item-list{
+    transition: 0.3s;
+}
+.item-list:hover{
+    border-bottom: 8px solid #ffce00;
+    color: #ffce00 !important;
+}
+
+
+.outline-orange:focus{
+    outline: 2px solid  transparent !important;
+}
+
+.border-orange {
+    border: 2px solid transparent !important;
+}
+
+.border-orange:focus{
+     border: 2px solid #ffce00 !important;
+}
+
+.w-min-16{
+    min-width: 16rem;
+}
+.overlay{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+.shadowOrange{
+    background: transparent linear-gradient(180deg, #FFCE46 0%, #FF9A43 100%) 0% 0% no-repeat padding-box;
+}
+
+.RealtiveCenterY{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.RealtiveCenterX {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.RealtiveCenterXY {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+
+
