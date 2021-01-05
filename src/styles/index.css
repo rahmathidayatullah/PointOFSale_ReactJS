@@ -39,6 +39,7 @@ transition: 0.3s ease-in-out;
 }
 
 .border-orange {
+    
     border: 2px solid transparent !important;
 }
 
@@ -89,4 +90,39 @@ transition: 0.3s ease-in-out;
 border-right: 4px solid orange;
 }
 
+.text-uXs{font-size: 0.60rem;}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button{
+    display: none !important;
+
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
+    display: none !important;
+
+}
+
+.react-calendar__month-view__weekdays__weekday{
+    display: flex;
+    justify-content: center;
+}
+
+.react-calendar__month-view__weekdays{
+    margin-top: 15px;
+}
+.react-calendar__month-view__days{
+    margin-top: 6px;
+    text-decoration: none !important;
+    background-color: rgb(230, 230, 230);
+    font-weight: 700 !important;
+}
+
+.react-calendar__tile.react-calendar__month-view__days__day .react-calendar__month-view__days__day--neighboringMonth {
+    font-weight: 700 !important;
+}
+
+th,td{
+    text-align: left;
+    padding: 0.75rem;
+}
 

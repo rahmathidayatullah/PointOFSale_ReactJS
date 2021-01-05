@@ -1,0 +1,7 @@
+props styling error
+props data error
+props data beda compnenet
+seting id auto increment
+kondisi ketika diklik tombol submit ada perubahan pada input text dan error dan styling
+mengatur posisi props error
+create data in object

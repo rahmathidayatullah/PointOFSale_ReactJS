@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
@@ -7,17 +7,42 @@ import Product from './components/Product'
 import User from './components/User'
 import Category from './components/Category'
 import History from './components/History'
-
-const Test = () => {
-  return <p>TEST</p>
-}
+import Down from '../../assets/img/admin/toggle-down.svg'
+import Close from '../../assets/img/close.svg'
+import TopToggle from './components/TopToggle'
 
 export default function Admin() {
+  const [toggle, setToggle] = useState(true)
+
+  const toggler = () => {
+    toggle ? setToggle(false) : setToggle(true)
+  }
   return (
-    <div className="relative">
-      <Header />
+    <div className="relative w-screen h-screen overflow-hidden">
+      <Header
+        TopElement={
+          <div className="cursor-pointer">
+            {toggle ? (
+              <img className="" onClick={toggler} src={Down} />
+            ) : (
+              <div>
+                <div
+                  onClick={toggler}
+                  className="overlay absolute w-screen h-screen z-10 left-0"
+                ></div>
+                <img src={Close} onClick={toggler} className="relative z-20" />
+
+                <TopToggle />
+              </div>
+            )}
+          </div>
+        }
+      />
       <Sidebar />
-      <div className="relative pr-20 pl-28 top-24 left-5 pt-5">
+      <div
+        className="relative pr-20 ml-28 top-24 left-5 pt-5"
+        style={{ height: '33rem', overflowY: 'scroll' }}
+      >
         <Switch>
           <Route exact path="/admin" component={Dashboard} />
         </Switch>

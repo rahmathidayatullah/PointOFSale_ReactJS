@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Brand from '../../../assets/img/brand.svg'
-import ToggleDown from '../../../assets/img/admin/toggle-down.svg'
+
 import Profile from '../../../assets/img/admin/profile.jpg'
 
-export default function Header() {
+export default function Header({ TopElement }) {
   return (
-    <div className="fixed w-full pr-20 pl-28 flex items-center justify-between bg-white p-4">
+    <div className="fixed w-full pr-20 pl-28 flex items-center justify-between bg-white p-4 z-10">
       <div className="flex flex-row items-center">
         <img src={Brand} />
         <p className="mb-4 text-5xl font-light ml-3">
@@ -24,7 +24,8 @@ export default function Header() {
         </div>
         {/* icon toggle */}
         <div className="shadow-lg border rounded-full bg-white w-10 h-10 flex items-center justify-center">
-          <img src={ToggleDown} />
+          {/* <img src={ToggleDown} /> */}
+          {TopElement}
         </div>
       </div>
     </div>
