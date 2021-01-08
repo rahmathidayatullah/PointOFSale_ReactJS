@@ -3,14 +3,14 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const config = {
-  api_host: 'http://localhost:3000',
-  site_title: 'Point Of Sale',
-  global_ongkir: 20000,
-  owner: 'Rahmat Hidayatullah',
-  contact: 'rahmathidayatullah996@gmail.com',
+  api_host: process.env.REACT_APP_API_HOST,
+  site_title: process.env.REACT_APP_SITE_TITLE,
+  global_ongkir: process.env.REACT_APP_GLOBAL_ONGKIR,
+  owner: process.env.REACT_APP_OWNER,
+  contact: process.env.REACT_APP_CONTACT,
   billing: {
-    account_no: 'xxxx-xxxxx-33-34',
-    bank_name: 'BRI',
+    account_no: process.env.REACT_APP_BILLING_NO,
+    bank_name: process.env.REACT_APP_BILLING_BANK,
   },
 }
 

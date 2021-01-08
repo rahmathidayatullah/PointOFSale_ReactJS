@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import Header from './components/Header'
-import Sidebar from './components/Sidebar'
-import Dashboard from './components/Dashboard'
-import Product from './components/Product'
-import User from './components/User'
-import Category from './components/Category'
-import History from './components/History'
+import Header from '../../components/Global/Header'
+import Sidebar from '../../components/Global/Sidebar'
+import Dashboard from './Dashboard'
+import Product from './Product'
+import User from './User'
+import Category from './Category'
+import History from './History'
 import Down from '../../assets/img/admin/toggle-down.svg'
 import Close from '../../assets/img/close.svg'
-import TopToggle from './components/TopToggle'
+import TopToggle from '../../components/Global/TopToggle'
 
 export default function Admin() {
   const [toggle, setToggle] = useState(true)
