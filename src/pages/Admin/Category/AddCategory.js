@@ -21,7 +21,7 @@ export default function AddCategory({ valuecategory, handleSubmit, onChange }) {
         onClick={handleSubmit}
       >
         <img src={Plus} />
-        <p className="font-bold text-md pl-3">Add Category</p>
+        <p className="font-bold text-md pl-3">Add Categoryy</p>
       </button>
     </div>
   )
