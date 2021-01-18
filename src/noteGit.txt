@@ -1,0 +1,5 @@
+create or push in new brand
+
+git add .
+git commit -m " ..  "
+git push origin master:<nama_Branch_baru>

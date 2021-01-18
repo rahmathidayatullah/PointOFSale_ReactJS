@@ -29,7 +29,7 @@ export async function logout() {
     : {}
   return await axios
     .post(`${config.api_host}/auth/logout`, null, {
-      headers: {
+      header: {
         authorization: `Bearer ${token}`,
       },
     })

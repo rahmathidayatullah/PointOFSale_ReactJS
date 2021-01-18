@@ -1,12 +1,25 @@
-import React from 'react'
-
+import React, { useState } from 'react'
 import IconDown from '../../../assets/img/admin/drop.svg'
 import Search from '../../../assets/img/admin/search.svg'
-
 import Left from '../../../assets/img/admin/left.svg'
 import Right from '../../../assets/img/admin/right.svg'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchCategory } from '../../../features/Category/action'
 
-export default function ManageCategory({ dataTbody }) {
+export default function ManageCategory({ content }) {
+  const dispatch = useDispatch()
+  const [cilok, setcilok] = useState([])
+  const [name, setName] = useState('')
+  // const [status, setStatus] = useState(false)
+
+  let category = useSelector((state) => state.category)
+
+  console.log(category)
+
+  React.useEffect(() => {
+    dispatch(fetchCategory())
+  }, [])
+
   return (
     <div className="w-3/5 bg-white rounded-xl p-5 mr-3 relative">
       <div className="border-b pb-3">
@@ -47,7 +60,7 @@ export default function ManageCategory({ dataTbody }) {
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>{dataTbody}</tbody>
+        <tbody>{content}</tbody>
       </table>
 
       <div className="flex w-full justify-end mt-3">

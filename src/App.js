@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Home from './pages/User'
 import Admin from './pages/Admin'
 import Login from './pages/Login'
+import Logout from './pages/Logout/Index'
 import './styles/tailwind.css'
 import './styles/index.css'
 import { Provider } from 'react-redux'
 import store from './app/store'
+import GuardRoute from './components/GuardRoute/Index'
 
 // import fungsi listen
 import { listen } from './app/listener'
@@ -21,11 +23,14 @@ function App() {
       <div className="App">
         <Router>
           <Switch>
+            <Route path="/logout">
+              <Logout />
+            </Route>
             <Route path="/login">
               <Login />
             </Route>
-            <Route path="/admin" component={Admin} />
-            <Route path="/" component={Home} />
+            <GuardRoute path="/admin" component={Admin} />
+            <GuardRoute path="/" component={Home} />
           </Switch>
         </Router>
       </div>

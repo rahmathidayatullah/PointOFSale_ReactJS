@@ -2,6 +2,7 @@
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux'
 
 import authReducer from '../features/Auth/reducer'
+import categoryReducer from '../features/Category/reducer'
 
 // (2) import redux-thunk middleware
 import thunk from 'redux-thunk'
@@ -10,7 +11,10 @@ import thunk from 'redux-thunk'
 const composerEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 // (4) gabung reducer, untuk sementara kosong, karena kita belum membuat reducer
-const rootReducers = combineReducers({ auth: authReducer })
+const rootReducers = combineReducers({
+  auth: authReducer,
+  category: categoryReducer,
+})
 
 // (5) buat store, dan gunakan composerEnhancer + middleware thunk
 const store = createStore(

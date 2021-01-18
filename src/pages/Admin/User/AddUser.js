@@ -1,7 +1,4 @@
 import { useForm } from 'react-hook-form'
-import InputText from '../../../components/Global/InputText'
-import SelectOption from '../../../components/Global/SelectOption'
-import ButtonAdd from '../../../components/Global/ButtonAdd'
 import Plus from '../../../assets/img/admin/add.svg'
 import React, { useState } from 'react'
 
@@ -40,14 +37,10 @@ export default function AddUser() {
   } = useForm()
 
   const onSubmit = async (formData) => {
-    // console.log('form data', formData)
-    // return alert(JSON.stringify(formData))
-    // alert(JSON.stringify(formData))
     setStatus(statusList.process)
 
     let { data } = await registerUser(formData)
 
-    console.log('data register asoy', data)
     // (1) cek apakah ada error
     if (data.error) {
       // (2) dapatkan field terkait jika ada errors
@@ -107,7 +100,7 @@ export default function AddUser() {
           ref={register(rules.full_name)}
         />
         <p className="mt-2 mb-0 ml-1 text-red-500">
-          {(console.log('register', register), errors.full_name?.message)}
+          {/* {(console.log('register', register), errors.full_name?.message)} */}
         </p>
 
         <input
@@ -118,22 +111,6 @@ export default function AddUser() {
           ref={register(rules.email)}
         />
         <p className="mt-2 mb-0 ml-1 text-red-500">{errors.email?.message}</p>
-
-        {/* <InputText
-          placeholder="User Email"
-          name="email"
-          type="email"
-          ref={register}
-        /> */}
-
-        {/* <SelectOption value={valuerole} onChange={onChange} name="role" /> */}
-
-        {/* <InputText
-          placeholder="New Password"
-          name="password"
-          type="password"
-          ref={register}
-        /> */}
 
         <input
           className="w-full mt-5 p-2 border border-gray-200 left-0 rounded-md focus:outline-none"
@@ -147,8 +124,6 @@ export default function AddUser() {
         </p>
         <button
           className="mt-3 p-2 bg-green-500 flex items-center text-white focus:outline-none w-full justify-center rounded-md"
-          // onClick={onClick}
-          // disabled={disabled}
           disabled={status === statusList.process}
         >
           {status === statusList.process ? (

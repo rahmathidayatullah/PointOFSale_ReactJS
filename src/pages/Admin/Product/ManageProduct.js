@@ -1,20 +1,20 @@
 import React from 'react'
 import IconDown from '../../../assets/img/admin/drop.svg'
 import Search from '../../../assets/img/admin/search.svg'
+import Eye from '../../../assets/img/admin/eye.svg'
+import Pencil from '../../../assets/img/admin/pencil.svg'
+import Sampah from '../../../assets/img/admin/sampah.svg'
+
+import Right from '../../../assets/img/admin/right.svg'
 
 import Left from '../../../assets/img/admin/left.svg'
-// import Right from '../../../../assets/img/admin/right.svg'
 
 export default function ManageProduct(props) {
   const Title = ['No', 'Nama', 'Category', 'Action']
 
-  // console.log(data)
-
   const HeadTable = Title.map((itemTitle) => (
     <th key={itemTitle}>{itemTitle}</th>
   ))
-
-  // console.log('props', props)
 
   return (
     <div className="w-3/5 bg-white rounded-xl p-5 mr-3 relative">
@@ -61,7 +61,28 @@ export default function ManageProduct(props) {
             {HeadTable}
           </tr>
         </thead>
-        <tbody>{props.dataBody}</tbody>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <div className="flex items-center">
+                <button>
+                  <img src={Eye} />
+                </button>
+                <button>
+                  {/* btn edit */}
+                  <img className="px-5" src={Pencil} />
+                </button>
+                <button>
+                  {/* btn delete */}
+                  <img src={Sampah} />
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
 
       <div className="flex w-full justify-end mt-3">
@@ -75,16 +96,19 @@ export default function ManageProduct(props) {
             {/* {props.handlePrev} */}
           </div>
 
-          {props.numbering}
-          {/* <p className="ml-4 text-gray-400 text-xl">1</p>
-          <p className="ml-4 text-gray-400 text-xl">2</p>
-          <p className="ml-4 text-gray-400 text-xl">3</p>
-          <p className="ml-4 text-gray-400 text-xl">4</p>
-          <p className="ml-4 text-gray-400 text-xl">5</p> */}
-          {props.nextPage}
-          {/* <div className="p-3 rounded bg-green-500 ml-4">
+          <nav aria-label="">
+            <ul className="pagination flex">
+              <li className="ml-4  text-xl cursor-pointer bg-green-500 p-2 text-white rounded">
+                <a
+                  // href="!#"
+                  className="page-link "
+                ></a>
+              </li>
+            </ul>
+          </nav>
+          <div className="p-3 rounded bg-green-500 ml-4">
             <img src={Right} />
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
