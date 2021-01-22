@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import AddCategory from './AddCategory'
+import { useForm } from 'react-hook-form'
 import ManageCategory from './ManageCategory'
 import { useDispatch, useSelector } from 'react-redux'
-import Edit from '../../../assets/img/admin/pencil.svg'
 import { deleteCategory } from '../../../api/categories'
+import Edit from '../../../assets/img/admin/pencil.svg'
 import Delete from '../../../assets/img/admin/sampah.svg'
 import {
   fetchCategory,
   getSinglecategory,
 } from '../../../features/Category/action'
-
+import { createCategory, editCategory } from '../../../api/categories'
+import { rules } from './validation'
+import Plus from '../../../assets/img/admin/add.svg'
 export default function Category(props) {
   const dispatch = useDispatch()
   let category = useSelector((state) => state.category)
-
+  const id = useSelector((state) => state.category.datasingle._id)
   const [single, setSingle] = useState('')
 
   const [status, setStatus] = useState(false)
@@ -32,10 +35,6 @@ export default function Category(props) {
   const content = (
     <>
       {category.data.map((items, index) => {
-        {
-          console.log('items')
-          console.log(items._id)
-        }
         return (
           <tr key={index}>
             <td>{index + 1}</td>
@@ -58,14 +57,54 @@ export default function Category(props) {
     setSingle(e.target.value)
   }
 
+  let { register, handleSubmit, errors, setErrors } = useForm()
+
+  const onSubmit = async (formData) => {
+    let { data } = await createCategory(formData)
+    dispatch(fetchCategory())
+  }
+
+  const onPut = async (formData) => {
+    let { data } = await editCategory(id, formData)
+    dispatch(fetchCategory())
+    setStatus(false)
+  }
+
   React.useEffect(() => {
     dispatch(fetchCategory())
   }, [])
 
   return (
     <div className="flex">
-      <ManageCategory single content={content} />
-      <AddCategory status={status} valCat={single} onChange={handleTest} />
+      <ManageCategory content={content} />
+      <AddCategory
+        formSubmit={
+          <form
+            onSubmit={
+              status === true ? handleSubmit(onPut) : handleSubmit(onSubmit)
+            }
+          >
+            <input
+              className="w-full mt-5 p-2 border border-gray-200 left-0 rounded-md focus:outline-none"
+              placeholder="Category Name"
+              name="name"
+              ref={register(rules.category)}
+              value={single}
+              onChange={handleTest}
+              // defaultValue={category}
+            />
+            <button className="mt-3 p-2 bg-green-500 text-white focus:outline-none flex items-center w-full justify-center rounded-md">
+              <img src={Plus} />
+              {status === true ? (
+                <p className="font-bold text-md pl-3">Edit Category</p>
+              ) : (
+                <p className="font-bold text-md pl-3">Add Category</p>
+              )}
+            </button>
+          </form>
+        }
+        textTitle={status === true ? 'Edit' : 'Add'}
+      />
     </div>
   )
 }

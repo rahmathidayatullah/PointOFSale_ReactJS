@@ -24,6 +24,11 @@ export default function Index() {
   const dispatch = useDispatch()
   const history = useHistory()
 
+  const [errordata, seterrordata] = useState()
+
+  console.log('errordata')
+  console.log(errordata)
+
   //fungsi menangani form submit
   const onSubmit = async ({ email, password }) => {
     //set status menjadi 'process'
@@ -35,8 +40,11 @@ export default function Index() {
     //cek apakah server mengembalikan error
     if (data.error) {
       console.log('data eror')
+      // console.log('data errorrr')
+      // console.log(data)
       //tangani eror bertipe 'invalidCredential'
-      setError('password', { type: 'invalidCredential', message: data.message })
+      // setError('password', { type: 'invalidCredential', message: data.message })
+      seterrordata(data.message)
 
       //set status menjadi error
       setStatus(statusList.error)
@@ -48,7 +56,7 @@ export default function Index() {
 
       //dispatch ke redux store, action 'userlogin' dengan data 'user' dan 'token'
       dispatch(userLogin(user, token))
-      history.push('/')
+      history.push('/admin')
 
       //redirect ke halaman home user dashboard
     }
@@ -80,11 +88,24 @@ export default function Index() {
             <p className="text-4xl font-normal">Welcome to</p>
             <p className="text-4xl font-bold mt-3">Point Of Sale!</p>
             <form onSubmit={handleSubmit(onSubmit)} className="mt-12">
+              {/* {data.error ? <p className="float-right mr-5 mb-3"></p> : {}} */}
+              {
+                <div>
+                  {errordata ? (
+                    <p className="float-right mr-5 mb-3 text-red-500 font-bold">
+                      {errordata}
+                    </p>
+                  ) : (
+                    ''
+                  )}
+                </div>
+              }
+
               <input
                 type="text"
                 placeholder="Email"
                 name="email"
-                className="w-full pl-3 bg-white rounded-full py-2 text-md"
+                className="w-full pl-3 bg-white rounded-full py-2 text-md focus:outline-none"
                 ref={register(rules.email)}
               />
               <p className="mt-2 mb-0 ml-1 text-red-500 pl-3">
@@ -94,9 +115,12 @@ export default function Index() {
                 type="text"
                 name="password"
                 placeholder="Password"
-                className="w-full pl-3 bg-white rounded-full py-2 text-md mt-4"
+                className="w-full pl-3 bg-white rounded-full py-2 text-md mt-4 focus:outline-none"
                 ref={register(rules.password)}
               />
+              <p className="mt-2 mb-0 ml-1 text-red-500 pl-3">
+                {errors.password?.message}
+              </p>
               <button
                 className="w-full mt-4 text-center bg-gray-500 rounded-full text-white text-md py-2 font-bold"
                 disabled={status === 'process'}

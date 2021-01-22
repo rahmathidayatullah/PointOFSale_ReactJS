@@ -37,8 +37,7 @@ export const fetchCategory = () => {
 
     try {
       let { data } = await debouncedFetchCategory(params)
-      console.log('dataaa')
-      console.log(data)
+      console.log('cinta')
       dispatch(successFetchingCategory(data))
     } catch (error) {
       dispatch(errorFetchingCategory())
@@ -47,20 +46,14 @@ export const fetchCategory = () => {
 }
 
 export const getSinglecategory = (items) => {
-  console.log('id getsingleeeee')
-  console.log(items)
   let id = items._id
-  console.log('_id')
-  console.log(id)
   return async (dispatch, getstate) => {
     try {
-      console.log('cuyyy')
       let { data } = await getSinglecategoryy(id)
-      console.log('cuyyyss')
-      console.log(data)
+
       dispatch(startEditCategory(data))
     } catch (error) {
-      console.log('error')
+      console.log(error)
     }
   }
 }

@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import Header from '../../components/Global/Header'
 import Sidebar from '../../components/Global/Sidebar'
 import Dashboard from './Dashboard'
+import Variant from './Variant'
 import Product from './Product'
 import User from './User'
 import Category from './Category'
@@ -45,6 +46,9 @@ export default function Admin() {
       >
         <Switch>
           <Route exact path="/admin" component={Dashboard} />
+        </Switch>
+        <Switch>
+          <Route path="/admin/variant" component={Variant} />
         </Switch>
         <Switch>
           <Route path="/admin/product" component={Product} />

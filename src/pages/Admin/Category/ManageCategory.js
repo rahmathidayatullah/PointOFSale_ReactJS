@@ -8,14 +8,6 @@ import { fetchCategory } from '../../../features/Category/action'
 
 export default function ManageCategory({ content }) {
   const dispatch = useDispatch()
-  const [cilok, setcilok] = useState([])
-  const [name, setName] = useState('')
-  // const [status, setStatus] = useState(false)
-
-  let category = useSelector((state) => state.category)
-
-  console.log(category)
-
   React.useEffect(() => {
     dispatch(fetchCategory())
   }, [])

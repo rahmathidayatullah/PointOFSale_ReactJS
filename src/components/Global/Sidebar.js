@@ -18,6 +18,13 @@ export default function Sidebar() {
           </Link>
         </li>
         <li className="py-8 list-side w-full flex justify-center">
+          <Link to="/admin/variant">
+            <p>variant</p>
+            {/* <img src={Product} /> */}
+            {/* image */}
+          </Link>
+        </li>
+        <li className="py-8 list-side w-full flex justify-center">
           <Link to="/admin/product">
             <img src={Product} />
             {/* image */}
