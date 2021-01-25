@@ -66,6 +66,7 @@ export default function Category(props) {
 
   const onPut = async (formData) => {
     let { data } = await editCategory(id, formData)
+    console.log('formDataaaaa', formData)
     dispatch(fetchCategory())
     setStatus(false)
   }

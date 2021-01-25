@@ -1,10 +1,10 @@
 import debounce from 'debounce-promise'
 
-import { SUCCESS_FETCHING_VARIANT } from './constants'
-import { getAllVariant } from '../../api/variants'
+import { SUCCESS_FETCHING_VARIANT, START_EDIT_VARIANT } from './constants'
+import { getAllVariant, getSinglevariant } from '../../api/variants'
 // import { successFetchingVariant } from '../Category/action'
 
-let debouncedFetchVariant = debounce(getAllVariant, 0)
+let debouncedFetchVariant = debounce(getAllVariant, 1)
 
 export const fetchVariant = () => {
   return async (dispatch, getState) => {
@@ -27,6 +27,26 @@ export const fetchVariant = () => {
     } catch (error) {
       console.log(error)
     }
+  }
+}
+
+export const getSingleVariantt = (item) => {
+  let id = item._id
+  return async (dispatch, getstate) => {
+    try {
+      let { data } = await getSinglevariant(id)
+      console.log('data from action', data)
+      dispatch(startEditVariant(data))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+export const startEditVariant = (data) => {
+  return {
+    type: START_EDIT_VARIANT,
+    data,
   }
 }
 

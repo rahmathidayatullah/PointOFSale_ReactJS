@@ -3,17 +3,37 @@ import IconDown from '../../../assets/img/admin/drop.svg'
 import Search from '../../../assets/img/admin/search.svg'
 import Edit from '../../../assets/img/admin/pencil.svg'
 import Delete from '../../../assets/img/admin/sampah.svg'
-import { fetchVariant } from '../../../features/Variant/action'
+import {
+  fetchVariant,
+  getSingleVariantt,
+} from '../../../features/Variant/action'
 import { useDispatch, useSelector } from 'react-redux'
+import { deleteVariant } from '../../../api/variants'
 export default function ManageVariant() {
   let dispatch = useDispatch()
-  // let variant = useSelector((state) => state.variant)
 
   let variant = useSelector((state) => state.variant)
 
-  React.useEffect(() => {
+  const handleSingle = (item) => {
+    dispatch(getSingleVariantt(item))
+    // dispatch(fetchVariant())
+  }
+
+  const handleDelete = (id) => {
+    // console.log('id', id)
+    dispatch(deleteVariant(id))
     dispatch(fetchVariant())
-  }, [])
+  }
+
+  React.useEffect(
+    () => {
+      dispatch(fetchVariant())
+      console.log('variant', variant)
+    },
+    [
+      // variant
+    ],
+  )
 
   return (
     <div className="w-3/5 bg-white rounded-xl p-5 mr-3 relative">
@@ -99,14 +119,16 @@ export default function ManageVariant() {
                     })}
                   </td>
                   <td className="flex items-center">
-                    <button className="mr-3">
+                    <button
+                      className="mr-3"
+                      onClick={() => handleDelete(item._id)}
+                    >
                       <img src={Delete} />
                     </button>
-                    <button>
+                    <button onClick={() => handleSingle(item)}>
                       <img src={Edit} />
                     </button>
                   </td>
-                  {/* <td>{stock}</td> */}
                 </tr>
               )
             })}
