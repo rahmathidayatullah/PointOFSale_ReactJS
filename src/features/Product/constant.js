@@ -1,0 +1,10 @@
+export const START_FETCHING_PRODUCT = 'features/Product/START_FETCHING_PRODUCT'
+export const ERROR_FETCHING_PRODUCT = 'features/Product/ERROR_FETCHING_PRODUCT'
+export const SUCCESS_FETCHING_PRODUCT =
+  'features/Product/SUCCESS_FETCHING_PRODUCT'
+export const START_FETCHING_SINGLE = 'features/Product/START_FETCHING_SINGLE'
+export const SET_KEYWORD = 'features/Product/SET_KEYWORD'
+export const SET_LIMIT = 'features/Product/SET_LIMIT'
+export const SET_PAGE = 'features/Product/SET_PAGE'
+export const NEXT_PAGE = 'features/Product/NEXT_PAGE'
+export const PREV_PAGE = 'features/Product/PREV_PAGE'

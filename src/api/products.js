@@ -27,13 +27,15 @@ export async function getSingleProduct(id) {
   })
 }
 
-export async function createProduct() {
+export async function createProduct(data) {
   let { token } = localStorage.getItem('auth')
     ? JSON.parse(localStorage.getItem('auth'))
     : {}
 
-  return await axios.post(`${config.api_host}/api/products`, {
+  return await axios.post(`${config.api_host}/api/products`, data, {
     headers: {
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data',
       authorization: `Bearer ${token}`,
     },
   })
@@ -51,14 +53,32 @@ export async function updateProduct(id) {
   })
 }
 
-export async function deleteProduct(id) {
+// export async function deleteProduct(id) {
+//   let { token } = localStorage.getItem('auth')
+//     ? JSON.parse(localStorage.getItem('auth'))
+//     : {}
+
+//   return await axios.delete(`${config.api_host}/api/products/${id}`, {
+//     headers: {
+//       authorization: `Bearer ${token}`,
+//     },
+//   })
+// }
+
+export const deleteProduct = (id) => {
   let { token } = localStorage.getItem('auth')
     ? JSON.parse(localStorage.getItem('auth'))
     : {}
-
-  return await axios.delete(`${config.api_host}/api/products/${id}`, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  })
+  return async () => {
+    try {
+      const del = await axios.delete(`${config.api_host}/api/products/${id}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      console.log('RESPONSE DELETE', del)
+    } catch (error) {
+      console.log(error.response)
+    }
+  }
 }
