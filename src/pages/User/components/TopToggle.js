@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import Profile from '../../../assets/img/profile.png'
 import Logout from '../../../assets/img/logout.svg'
 import Moon from '../../../assets/img/moon.svg'
@@ -31,15 +32,17 @@ export default function TopToggle() {
         <img src={Toggle} />
         {/* toggle */}
       </div>
-      <div className="flex flex-row items-center mt-5">
-        <div className="flex flex-row items-center">
-          <div className="rounded-full bg-black p-4">
-            <img src={Logout} />
-            {/* img */}
+      <Link to="/logout">
+        <div className="flex flex-row items-center mt-5">
+          <div className="flex flex-row items-center">
+            <div className="rounded-full bg-black p-4">
+              <img src={Logout} />
+              {/* img */}
+            </div>
+            <p className="mb-0 ml-4 text-xl font-semibold">Logout</p>
           </div>
-          <p className="mb-0 ml-4 text-xl font-semibold">Logout</p>
         </div>
-      </div>
+      </Link>
     </div>
   )
 }

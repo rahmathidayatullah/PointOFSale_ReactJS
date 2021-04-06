@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import Plus from '../../../assets/img/admin/add.svg'
-import { getAllProducts } from '../../../api/products'
 import { createVariant, editVariant } from '../../../api/variants'
-// import { getSingleVariantt } from '../../../features/Variant/action'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  getSingleVariantt,
+  fetchingEditvariant,
   fetchVariant,
 } from '../../../features/Variant/action'
 export default function AddVariant() {
@@ -14,33 +12,34 @@ export default function AddVariant() {
   let variant = useSelector((state) => state.variant.datasingle)
   let variantAll = useSelector((state) => state.variant)
 
-  const [datavariant, setDatavariant] = useState()
+  let status2 = useSelector((state) => state.variant.status2)
+  // menampung data form input
+  // const [form, setForm] = useState({
+  //   nama_variant: '',
+  //   jenis_variant: '',
+  //   stock: 0,
+  // })
+
+  const [errornama_variant, setErrornama_variant] = useState('kosong')
+  const [errorname, setErrorname] = useState('kosong')
+  const [errorstock, setErrorstock] = useState('kosong')
+
+  console.log('errornama_variant ::   ', errornama_variant)
+  console.log('errorname ::   ', errorname)
+  console.log('errorstock ::   ', errorstock)
+
+  // show data when klik button
+  const [showErrorVAriant, setShowErrorVAriant] = useState('')
+
   const [dataCategory, setdataCategory] = useState({
     name: '',
     option: [],
   })
-  const [valuevar, setValuevar] = useState(0)
-  const [dataarrayy, setDataarrayy] = useState([])
-  // input list from redux data single option
   const [inputList, setinputList] = useState([{ name: '', stock: '' }])
-  // nama variant dari redux get name_variant
   const [valuename, setValuename] = useState()
-  const [namavariant, setnamavariant] = useState()
-  const [status, setstatus] = useState(true)
-
-  // const fetchVariant = async () => {
-  //   try {
-  //     let data = await getAllProducts()
-  //     setDatavariant(data.data.data)
-  //     // console.log(datavariant)
-  //   } catch (error) {}
-  // }
-
-  // console.log(namavariant)
 
   const handleAddInput = () => {
     setinputList([...inputList, { name: '', stock: '' }])
-    console.log('inputList', inputList)
   }
 
   const handleRemove = (index) => {
@@ -52,22 +51,44 @@ export default function AddVariant() {
   const handleChange = (e, index) => {
     const { name, value } = e.target
     let data = dataCategory
-    console.log('data', data)
 
+    if (name === 'nama_variant' && value.length < 3) {
+      setErrornama_variant(
+        'Nama variant minimal 3 karakter atau tidak boleh kosong',
+      )
+    } else {
+      setErrornama_variant('')
+    }
     if (name === 'nama_variant') {
-      // setnamavariant(e.target.value)
       setValuename(value)
-      console.log('namavariant', valuename)
       var nama_variantt = {
         ...data,
         name: value,
         option: inputList,
       }
     } else {
+      if (name === 'name' && value.length < 3) {
+        setErrorname('Name option minimal 3 karakter atau tidak boleh kosong')
+      } else {
+        setErrorname('')
+      }
+
+      if (name === 'stock' && value < 1) {
+        setErrorstock('stock minimal 1')
+      } else {
+        setErrorstock('')
+      }
+
       const list = [...inputList]
-      list[index][name] = value
-      setinputList(list)
+      // 0: {name: "3", stock: ""}
+      console.log('value', value)
       console.log('list', list)
+
+      // ngambil nilai index berdasarkan name value yang diinput dari looping inputlist
+      list[index][name] = value
+
+      setinputList(list)
+      console.log('inputList', inputList)
       var nama_variantt = {
         ...data,
         name: valuename,
@@ -75,67 +96,67 @@ export default function AddVariant() {
       }
     }
 
-    console.log('nama_variantt', nama_variantt)
-
     setdataCategory(nama_variantt)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    try {
-      let data = await createVariant(dataCategory)
-      // fetchVariant()
-      dispatch(fetchVariant())
-    } catch (res) {
-      console.log(res)
+    if (
+      errornama_variant ||
+      errornama_variant === 'kosong' ||
+      errorname ||
+      errorname === 'kosong' ||
+      errorstock ||
+      errorstock === 'kosong'
+    ) {
+      alert('data harus diisi')
+    } else {
+      try {
+        let data = await createVariant(dataCategory)
+        dispatch(fetchVariant())
+      } catch (res) {
+        console.log(res)
+      }
     }
   }
 
-  const handleEdit = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault()
     try {
-      let id = variant.data._id
-      let { data } = await editVariant(id, dataCategory)
-      setstatus(true)
+      let id = variant._id
+      dispatch(fetchingEditvariant(dataCategory, id))
       dispatch(fetchVariant())
-    } catch (error) {}
+    } catch (response) {
+      console.log(response)
+    }
   }
 
   React.useEffect(() => {
-    fetchVariant()
-    dispatch(getSingleVariantt(variant))
-    dispatch(getSingleVariantt(variantAll))
-    if (variant.data === undefined) {
-      console.log('data kosong')
+    dispatch(fetchVariant())
+
+    if (!variant.option) {
+      console.log('kosong')
     } else {
-      setValuevar(variant.data.option.length)
-      // input list from redux data single option
-      setinputList(variant.data.option)
-      // nama variant dari redux get name_variant
-      setValuename(variant.data.name)
-      console.log('variantAll', variantAll.status)
-      setstatus(variantAll.status)
-      console.log('status', status)
+      setinputList(variant.option)
+      setValuename(variant.name)
     }
-  }, [variant])
+  }, [variant, variantAll.statusedit])
 
   return (
     <div className="w-2/5 bg-white rounded-xl p-5">
       <div className="border-b pb-3">
         <p className="font-bold text-2xl">
-          Add Variant
+          {status2 === 'edit' ? 'Edit' : 'Add'}
           <span className="font-normal ml-2">Variant</span>
         </p>
       </div>
-      <form onSubmit={status === true ? handleSubmit : handleEdit}>
-        {/* {console.log('varianttttt', variant.data.name)} */}
+      <form onSubmit={status2 === 'edit' ? handleUpdate : handleSubmit}>
         <input
           type="text"
           name="nama_variant"
           className="border w-full mt-3 text-sm py-2 pl-2"
           placeholder="Nama Variant"
           onChange={handleChange}
-          // nama variant dari redux get name_variant
           value={valuename}
         />
 
@@ -180,7 +201,7 @@ export default function AddVariant() {
         >
           <img src={Plus} />
           <p className="font-bold text-md pl-3">
-            {status === true ? 'Add Variants' : 'Edit Variant'}
+            {status2 === 'edit' ? 'Edit Variants' : 'Add Variant'}
           </p>
         </button>
       </form>

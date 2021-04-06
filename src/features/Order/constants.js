@@ -1,0 +1,2 @@
+export const START_FETCHING_ORDER = 'features/Order/START_FETCHING_ORDER'
+export const SUCCESS_FETCHING_ORDER = 'features/Order/SUCCESS_FETCHING_ORDER'

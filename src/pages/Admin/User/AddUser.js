@@ -1,142 +1,108 @@
-import { useForm } from 'react-hook-form'
-import Plus from '../../../assets/img/admin/add.svg'
 import React, { useState } from 'react'
-
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchUser, fetchEditUser } from '../../../features/User/action'
+import { useForm } from 'react-hook-form'
+// import { createUser } from '../../../api/user'
+import { createUser } from '../../../api/user'
 import { rules } from './validation'
-import { registerUser } from '../../../api/auth'
-
-// status list
-const statusList = {
-  idle: 'idle',
-  process: 'process',
-  success: 'success',
-  error: 'error',
-}
 
 export default function AddUser() {
-  //   {
-  //   valueEmail,
-  //   valueFullname,
-  //   valuerole,
-  //   valuenewpassword,
-  //   // handleSubmit,
-  //   onChange,
-  // }
-  const [status, setStatus] = useState(statusList.idle)
+  let dispatch = useDispatch()
+  const { register, handleSubmit, errors, setErrors } = useForm()
 
-  const [messageName, setmessageName] = useState('')
-  // (2) keluarkan fungsi `register`, `handleSubmit`, `errors`, `setError` dari `useForm`
-  let {
-    register,
-    getValues,
-    trigger,
-    handleSubmit,
-    reset,
-    errors,
-    setError,
-  } = useForm()
+  let user = useSelector((state) => state.user.datasingle)
 
-  const onSubmit = async (formData) => {
-    setStatus(statusList.process)
+  let userAll = useSelector((state) => state.user)
+  let idsingle = useSelector((state) => state.user.datasingle._id)
+  let statusedit = useSelector((state) => state.user.statusedit)
 
-    let { data } = await registerUser(formData)
-
-    // (1) cek apakah ada error
-    if (data.error) {
-      // (2) dapatkan field terkait jika ada errors
-      let fields = Object.keys(data.fields)
-
-      // (3) untuk masing-masing field kita terapkan error dan tangkap pesan errornya
-      fields.forEach((field) => {
-        setError(field, {
-          type: 'server',
-          message: data.fields[field]?.properties?.message,
-        })
-      })
-      setStatus(statusList.error)
-    }
-
-    // const result = getValues('full_name')
-    if (getValues('full_name')) {
-      setmessageName(getValues('full_name'))
-      // alert(messageName)
-    }
-
-    reset()
-
-    setStatus(statusList.success)
+  const onSubmit = async (data) => {
+    let { datar } = await createUser(data)
+    console.log(datar)
+    dispatch(fetchUser())
   }
+
+  const onEdit = async (data) => {
+    console.log('data edit', data, idsingle)
+    dispatch(fetchEditUser(data, idsingle))
+    dispatch(fetchUser())
+  }
+
+  const [full_name, setfull_name] = useState('')
+  const [email, setemail] = useState('')
+  const [password, setpassword] = useState('')
+  const [role, setRole] = useState('')
+  React.useEffect(() => {
+    dispatch(fetchUser())
+    setfull_name(user.full_name)
+    setemail(user.email)
+    setpassword(user.password)
+  }, [user])
 
   return (
     <div className="w-2/5 bg-white rounded-xl p-5">
       <div className="border-b pb-3 flex items -center">
         <p className="font-bold text-2xl">
-          Add
+          {statusedit === 'add' ? 'ADD' : 'EDIT'}
           <span className="font-normal ml-2">User</span>
-          {messageName ? (
-            <span className="font-normal ml-2 text-red-500 text-sm">
-              {messageName} Berhasil !
-            </span>
-          ) : (
-            ''
-          )}
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {/* <InputText
-          placeholder="Fullname"
-          name="full_name"
-          type="text"
-          ref={register}
-        /> */}
-
+      <form
+        onSubmit={
+          statusedit === 'add' ? handleSubmit(onSubmit) : handleSubmit(onEdit)
+        }
+      >
         <input
           className="w-full mt-5 p-2 border border-gray-200 left-0 rounded-md focus:outline-none"
-          placeholder="Fullname"
           name="full_name"
+          placeholder="Fullname"
           type="text"
-          defaultValue=""
+          value={full_name}
+          onChange={(e) => setfull_name(e.target.value)}
           ref={register(rules.full_name)}
         />
-        <p className="mt-2 mb-0 ml-1 text-red-500">
-          {/* {(console.log('register', register), errors.full_name?.message)} */}
-        </p>
-
+        {errors.full_name?.message}
         <input
           className="w-full mt-5 p-2 border border-gray-200 left-0 rounded-md focus:outline-none"
-          placeholder="User Email"
           name="email"
-          type="email"
+          placeholder="Email"
+          type="text"
+          value={email}
+          onChange={(e) => setemail(e.target.value)}
           ref={register(rules.email)}
         />
-        <p className="mt-2 mb-0 ml-1 text-red-500">{errors.email?.message}</p>
+        {errors.email?.message}
 
         <input
           className="w-full mt-5 p-2 border border-gray-200 left-0 rounded-md focus:outline-none"
-          placeholder="New Password"
           name="password"
+          placeholder="Password"
           type="password"
+          value={password}
+          onChange={(e) => setpassword(e.target.value)}
           ref={register(rules.password)}
         />
-        <p className="mt-2 mb-0 ml-1 text-red-500">
-          {errors.password?.message}
-        </p>
-        <button
-          className="mt-3 p-2 bg-green-500 flex items-center text-white focus:outline-none w-full justify-center rounded-md"
-          disabled={status === statusList.process}
+
+        {errors.password?.message}
+        <select
+          className="w-full mt-3 p-2 border border-gray-200 left-0 rounded-md text-gray-500 focus:outline-none"
+          name="role"
+          ref={register(rules.role)}
         >
-          {status === statusList.process ? (
-            <div className="flex items-center">
-              <img src={Plus} />
-              <p className="font-bold text-md pl-3">Sedang Proses</p>
-            </div>
-          ) : (
-            <div className="flex items-center">
-              <img src={Plus} />
-              <p className="font-bold text-md pl-3">Add Produk</p>
-            </div>
-          )}
+          <option value="">Pilih Role</option>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        {errors.role?.message}
+
+        <button
+          className="mt-3 p-2 bg-green-500 text-white focus:outline-none flex items-center w-full justify-center rounded-md font-bold"
+          type="submit"
+        >
+          {statusedit === 'add' ? 'ADD' : 'EDIT'}
+          &nbsp; USER
         </button>
       </form>
     </div>

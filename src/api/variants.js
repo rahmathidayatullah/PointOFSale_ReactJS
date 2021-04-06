@@ -7,7 +7,7 @@ export async function getAllVariant(params) {
     ? JSON.parse(localStorage.getItem('auth'))
     : {}
 
-  return await axios.get(`${config.api_host}/api/variants`, {
+  return await axios.get(`${config.api_host}/api/variant`, {
     params,
     headers: {
       authorization: `Bearer ${token}`,
@@ -20,23 +20,24 @@ export async function getSinglevariant(id) {
     ? JSON.parse(localStorage.getItem('auth'))
     : {}
 
-  return await axios.get(`${config.api_host}/api/variants/${id}`, {
+  return await axios.get(`${config.api_host}/api/variant/${id}`, {
     headers: {
       authorization: `Bearer ${token}`,
     },
   })
 }
 
-export async function editVariant(id, data) {
+export async function editVariant(dataCategory, id) {
   let { token } = localStorage.getItem('auth')
     ? JSON.parse(localStorage.getItem('auth'))
     : {}
 
-  return await axios.put(`${config.api_host}/api/variants/${id}`, data, {
+  return await axios.put(`${config.api_host}/api/variant/${id}`, dataCategory, {
     headers: {
       authorization: `Bearer ${token}`,
     },
   })
+  // console.log('data')
 }
 
 export async function createVariant(datacategory) {
@@ -44,7 +45,7 @@ export async function createVariant(datacategory) {
     ? JSON.parse(localStorage.getItem('auth'))
     : {}
 
-  return await axios.post(`${config.api_host}/api/variants`, datacategory, {
+  return await axios.post(`${config.api_host}/api/variant`, datacategory, {
     headers: {
       authorization: `Bearer ${token}`,
     },
@@ -58,7 +59,7 @@ export const deleteVariant = (id) => {
 
   return async () => {
     try {
-      const del = await axios.delete(`${config.api_host}/api/variants/${id}`, {
+      const del = await axios.delete(`${config.api_host}/api/variant/${id}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },

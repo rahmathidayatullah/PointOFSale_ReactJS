@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+.tolltipss{
+    /* background-color:orange;
+    padding: 5px 0;
+    width: 100px;
+    height: auto;
+    color: white;
+    border: 2px solid rgb(207, 207, 207);
+    right: -140%;
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    display: none; */
+    display: none;
+    position: absolute;
+    top: 124%;
+    font-size: 12px;
+}
+
 body{
 color:  #6e6e6e !important;
 background: #f7f7f7;
@@ -29,6 +47,10 @@ transition: 0.3s ease-in-out;
     transition: 0.3s;
 }
 .item-list:hover{
+    border-bottom: 8px solid #ffce00;
+    color: #ffce00 !important;
+}
+.activeList{
     border-bottom: 8px solid #ffce00;
     color: #ffce00 !important;
 }
@@ -84,11 +106,17 @@ transition: 0.3s ease-in-out;
 
 .list-side {
     border-right: 4px solid transparent;
+    
 }
 
 .list-side:hover{
 border-right: 4px solid orange;
 }
+.list-side:hover .tolltipss{
+    display: flex;
+    justify-content: center;
+}
+
 
 .text-uXs{font-size: 0.60rem;}
 
@@ -126,26 +154,17 @@ th,td{
     padding: 0.75rem;
 }
 
-
-/* pagination */
-/* .pagination {
-    display: inline-block;
+.tolltipSort{
+    display: none;
+    position: absolute;
+    bottom: -17px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 10px;
 }
 
-.pagination a {
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
+.btnSort:hover .tolltipSort{
+    display: block;
 }
-
-.pagination a.active {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.pagination a:hover:not(.active) {
-    background-color: #ddd;
-} */
-/* end pagination */
 

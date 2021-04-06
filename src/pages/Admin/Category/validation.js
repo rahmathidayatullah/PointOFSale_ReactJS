@@ -1,9 +1,7 @@
 const rules = {
-  category: {
-    required: {
-      value: true,
-      message: 'Field category harus diisi',
-    },
+  name: {
+    required: { value: true, message: 'Data nama category harus diisi .' },
+    minLength: { value: 3, message: 'Minimal 3 karakter untuk nama category' },
   },
 }
 

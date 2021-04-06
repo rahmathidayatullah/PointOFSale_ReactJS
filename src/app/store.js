@@ -5,6 +5,14 @@ import authReducer from '../features/Auth/reducer'
 import categoryReducer from '../features/Category/reducer'
 import variantReducer from '../features/Variant/reducer'
 import productReducer from '../features/Product/reducer'
+import userReducer from '../features/User/reducer'
+import discountReducer from '../features/Discount/reducer'
+import cartReducer from '../features/Cart/reducer'
+import modalReducer from '../features/Modal/reducer'
+import orderReducer from '../features/Order/reducer'
+import historyReducer from '../features/History/reducer'
+import dashboardReducer from '../features/Dashboard/reducer'
+import statisticReducer from '../features/Statistic/reducer'
 
 // (2) import redux-thunk middleware
 import thunk from 'redux-thunk'
@@ -18,6 +26,14 @@ const rootReducers = combineReducers({
   category: categoryReducer,
   variant: variantReducer,
   product: productReducer,
+  user: userReducer,
+  discount: discountReducer,
+  cart: cartReducer,
+  modal: modalReducer,
+  order: orderReducer,
+  history: historyReducer,
+  dashboard: dashboardReducer,
+  statistic: statisticReducer,
 })
 
 // (5) buat store, dan gunakan composerEnhancer + middleware thunk

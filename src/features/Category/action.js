@@ -1,108 +1,99 @@
 import debounce from 'debounce-promise'
 
 import {
-  SUCCESS_FETCHING_CATEGORY,
   START_FETCHING_CATEGORY,
   ERROR_FETCHING_CATEGORY,
-  SET_PAGE,
+  SUCCESS_FETCHING_CATEGORY,
+  START_FETCHING_SINGLE,
+  SUCCESS_EDIT,
   SET_KEYWORD,
-  PREV_PAGE,
+  SET_LIMIT,
+  SET_PAGE,
   NEXT_PAGE,
-  DELETE_ITEM,
-  START_EDIT_CATEGORY,
+  PREV_PAGE,
 } from './constants'
 
-import { getAllCategory } from '../../api/categories'
-import { deleteCategory } from '../../api/categories'
-// import { editCategory } from '../../api/categories'
-import { getSinglecategoryy } from '../../api/categories'
+import { getAllCategory, editCategory } from '../../api/categories'
 
-// bungkus `getCategory` dengan `debounce`
-let debouncedFetchCategory = debounce(getAllCategory, 0)
-let debouncedDeleteCategory = debounce(deleteCategory, 0)
+let debouncedFetchCategory = debounce(getAllCategory, 1000)
 
 export const fetchCategory = () => {
   return async (dispatch, getState) => {
     dispatch(startFetchingCategory())
 
-    let perPage = getState().category.perPage || 9
-    let currentPage = getState().category.currentPage || 1
     let keyword = getState().category.keyword || ''
+    let limit = getState().category.limit || ''
+    let perPage = getState().category.perPage || 1
+    let currentPage = getState().category.currentPage || 1
 
     const params = {
-      limit: perPage,
-      skip: currentPage * perPage - perPage,
       q: keyword,
+      limit: limit === '' ? perPage : limit,
+      skip: currentPage * perPage - perPage,
     }
 
     try {
-      let { data } = await debouncedFetchCategory(params)
-      console.log('cinta')
-      dispatch(successFetchingCategory(data))
-    } catch (error) {
-      dispatch(errorFetchingCategory())
-    }
+      let {
+        data: { data, count },
+      } = await debouncedFetchCategory(params)
+      dispatch(successFetchingCategory({ data, count }))
+    } catch (error) {}
   }
 }
 
-export const getSinglecategory = (items) => {
-  let id = items._id
-  return async (dispatch, getstate) => {
-    try {
-      let { data } = await getSinglecategoryy(id)
-
-      dispatch(startEditCategory(data))
-    } catch (error) {
-      console.log(error)
-    }
+export const fetchSingleCategory = (item) => {
+  return {
+    type: START_FETCHING_SINGLE,
+    item,
   }
 }
-
-// useEffect
 
 export const startFetchingCategory = () => {
   return {
     type: START_FETCHING_CATEGORY,
   }
 }
-// export const startFetchingCategory = () => {
-//   return {
-//     type: START_FETCHING_CATEGORY,
-//   }
-// }
-export const startEditCategory = (data) => {
-  return {
-    type: START_EDIT_CATEGORY,
-    data,
-  }
-}
 
-export const startDelete = (id) => {
-  return async (dispatch, getState) => {
-    try {
-      let { data } = await debouncedDeleteCategory(id)
-      dispatch(successFetchingCategory(data))
-    } catch (error) {}
-  }
-}
-
-export const startdeleteCategoryy = (data) => {
-  return {
-    type: DELETE_ITEM,
-    data,
-  }
-}
-
-export const successFetchingCategory = (data) => {
+export const successFetchingCategory = (payload) => {
   return {
     type: SUCCESS_FETCHING_CATEGORY,
-    data,
+    ...payload,
+  }
+}
+
+export const fetchEditCategory = (data, idsingle) => {
+  return async (dispatch, getState) => {
+    try {
+      let { datar } = await editCategory(data, idsingle)
+      dispatch(succesEdit())
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
 export const errorFetchingCategory = () => {
   return {
     type: ERROR_FETCHING_CATEGORY,
+  }
+}
+export const succesEdit = () => {
+  return {
+    type: SUCCESS_EDIT,
+  }
+}
+
+export const setKeyword = (keyword) => {
+  return {
+    type: SET_KEYWORD,
+    keyword,
+  }
+}
+
+export const setLimit = (limit) => {
+  return {
+    type: SET_LIMIT,
+    limit,
   }
 }
 
@@ -122,12 +113,5 @@ export const goToNextPage = () => {
 export const goToPrevPage = () => {
   return {
     type: PREV_PAGE,
-  }
-}
-
-export const setKeyword = (keyword) => {
-  return {
-    type: SET_KEYWORD,
-    keyword,
   }
 }

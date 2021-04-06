@@ -6,10 +6,6 @@ import Sampah from '../../../assets/img/admin/sampah.svg'
 import { config } from '../../../config'
 
 import { Pagination } from 'upkit'
-
-import Right from '../../../assets/img/admin/right.svg'
-
-import Left from '../../../assets/img/admin/left.svg'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   fetchProduct,
@@ -20,29 +16,37 @@ import {
   goToNextPage,
   goToPrevPage,
 } from '../../../features/Product/action'
-import { deleteProduct, getAllProducts } from '../../../api/products'
+import { deleteProduct } from '../../../api/products'
 // import { getSingleProduct } from '../../../api/products'
 
-export default function ManageProduct(props) {
+export default function ManageProduct() {
   let dispatch = useDispatch()
   let dataAllProduct = useSelector((state) => state.product.data)
   let dataAllSearch = useSelector((state) => state.product)
-  console.log('dataAllSearch', dataAllSearch)
+  console.log('dataAllSearch', dataAllProduct)
+
   let status = useSelector((state) => state.product.status)
-  console.log('dataAllProduct', dataAllProduct)
-  const Title = ['No', 'Produk', 'Category', 'Variant', 'Image', 'Action']
+
+  const Title = [
+    'No',
+    'Produk',
+    'Diskon',
+    'Type',
+    'Category',
+    'Variant',
+    'Image',
+    'Action',
+  ]
 
   const HeadTable = Title.map((itemTitle) => (
     <th key={itemTitle}>{itemTitle}</th>
   ))
 
   const handleEdit = (item) => {
-    console.log(item)
     dispatch(fetchSingleProduct(item))
   }
 
   const handleDelete = (id) => {
-    // console.log(id)
     dispatch(deleteProduct(id))
     dispatch(fetchProduct())
   }
@@ -102,52 +106,48 @@ export default function ManageProduct(props) {
 
       <table className="w-full mt-5">
         <thead>
-          <tr>
-            {/* <th>No</th>
-            <th>Nama</th>
-            <th>Category</th>
-            <th>Action</th> */}
-            {HeadTable}
-          </tr>
+          <tr>{HeadTable}</tr>
         </thead>
         <tbody>
-          {/* <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <div className="flex items-center">
-                <button>
-                  <img src={Eye} />
-                </button>
-                <button>
-                  <img className="px-5" src={Pencil} />
-                </button>
-                <button>
-                  <img src={Sampah} />
-                </button>
-              </div>
-            </td>
-          </tr> */}
-          {status === 'success'
-            ? dataAllProduct.map((item, index) => {
+          {dataAllProduct === undefined || null
+            ? 'Data Kosong'
+            : dataAllProduct.map((item, index) => {
                 return (
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{item.name}</td>
-                    <td>{item.category.name}</td>
                     <td>
-                      <p>{item.variant.name}</p>
-                      {item.variant.option.map((item, index) => {
-                        return (
-                          <p key={index}>
-                            {item.name}&nbsp;
-                            {item.stock}
-                          </p>
-                        )
-                      })}
+                      {item.discount === undefined
+                        ? 'Tidak ada diskon'
+                        : item.discount.value}
+                    </td>
+                    <td>
+                      {item.discount === undefined
+                        ? 'Tidak ada diskon'
+                        : item.discount.type}
+                    </td>
+                    <td>
+                      {item.category.name === null
+                        ? 'data category kosong'
+                        : item.category.name}
+                    </td>
+                    <td>
+                      {item.variant === null ? (
+                        'null'
+                      ) : (
+                        <p>{item.variant.name}</p>
+                      )}
+
+                      {item.variant === null
+                        ? 'null'
+                        : item.variant.option.map((item, index) => {
+                            return (
+                              <p key={index}>
+                                {item.name}&nbsp;
+                                {item.stock}
+                              </p>
+                            )
+                          })}
                     </td>
                     <td>
                       <img
@@ -172,8 +172,7 @@ export default function ManageProduct(props) {
                     </td>
                   </tr>
                 )
-              })
-            : 'Loading'}
+              })}
         </tbody>
       </table>
 
@@ -186,35 +185,6 @@ export default function ManageProduct(props) {
           onNext={(_) => dispatch(goToNextPage())}
           onPrev={(_) => dispatch(goToPrevPage())}
         />
-        {/* <div className="flex items-center">
-         
-
-          <div onClick={props.handlePrev} className="p-3 rounded bg-green-500">
-            <img src={Left} />
-          </div>
-
-          <nav aria-label="">
-            <ul className="pagination flex">
-              <li className="ml-4  text-xl cursor-pointer bg-green-500 p-2 text-white rounded">
-                <a
-                  className="page-link "
-                >
-                  1
-                </a>
-              </li>
-              <li className="ml-4  text-xl cursor-pointer  p-2 text-gray-500 rounded">
-                <a
-                  className="page-link "
-                >
-                  2
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <div className="p-3 rounded bg-green-500 ml-4">
-            <img src={Right} />
-          </div>
-        </div> */}
       </div>
     </div>
   )

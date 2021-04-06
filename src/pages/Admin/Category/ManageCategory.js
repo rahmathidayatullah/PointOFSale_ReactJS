@@ -1,16 +1,52 @@
-import React, { useState } from 'react'
+import React from 'react'
 import IconDown from '../../../assets/img/admin/drop.svg'
 import Search from '../../../assets/img/admin/search.svg'
-import Left from '../../../assets/img/admin/left.svg'
-import Right from '../../../assets/img/admin/right.svg'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchCategory } from '../../../features/Category/action'
+import Pencil from '../../../assets/img/admin/pencil.svg'
+import Sampah from '../../../assets/img/admin/sampah.svg'
+import { Pagination } from 'upkit'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  fetchCategory,
+  fetchSingleCategory,
+  setKeyword,
+  setLimit,
+  setPage,
+  goToNextPage,
+  goToPrevPage,
+} from '../../../features/Category/action'
+import { deleteCategory } from '../../../api/categories'
 
-export default function ManageCategory({ content }) {
-  const dispatch = useDispatch()
+export default function ManageCategory() {
+  let dispatch = useDispatch()
+  let dataAllCategory = useSelector((state) => state.category.data)
+  let dataAllSearch = useSelector((state) => state.category)
+  let status = useSelector((state) => state.category.status)
+
+  const handleEdit = (item) => {
+    console.log(item)
+    dispatch(fetchSingleCategory(item))
+  }
+
+  const handleDelete = (id) => {
+    // console.log(id)
+    dispatch(deleteCategory(id))
+    dispatch(fetchCategory())
+  }
+
   React.useEffect(() => {
     dispatch(fetchCategory())
-  }, [])
+  }, [
+    dispatch,
+    dataAllSearch.keyword,
+    dataAllSearch.limit,
+    dataAllSearch.currentPage,
+    dataAllSearch.perPage,
+  ])
+
+  const Title = ['No', 'Nama Category', 'Action']
+  const HeadTable = Title.map((itemTitle) => (
+    <th key={itemTitle}>{itemTitle}</th>
+  ))
 
   return (
     <div className="w-3/5 bg-white rounded-xl p-5 mr-3 relative">
@@ -22,11 +58,17 @@ export default function ManageCategory({ content }) {
       <div className="flex items-center justify-between mt-8">
         {/* select entries */}
         <div className="relative w-40 flex items-center">
-          <select className="absolute left-0 py-2 pl-4 pr-8 text-white font-bold bg-green-500 appearance-none rounded focus:outline-none">
+          <select
+            className="absolute left-0 py-2 pl-4 pr-8 text-white font-bold bg-green-500 appearance-none rounded focus:outline-none"
+            value={dataAllSearch.limit}
+            onChange={(e) => {
+              dispatch(setLimit(e.target.value))
+            }}
+          >
             <option>Show & entries</option>
-            <option>value 1</option>
-            <option>value 2</option>
-            <option>value 3</option>
+            <option value="1">Show 1</option>
+            <option value="2">Show 2</option>
+            <option value="5">Show 5</option>
           </select>
           <img
             className="right-1 absolute z-10 RealtiveCenterY pointer-events-none"
@@ -39,6 +81,11 @@ export default function ManageCategory({ content }) {
           <input
             className="absolute p-2 border border-gray-200 left-0 rounded focus:outline-none"
             placeholder="Search Category"
+            name="search"
+            value={dataAllSearch.keyword}
+            onChange={(e) => {
+              dispatch(setKeyword(e.target.value))
+            }}
           />
           <img className="RealtiveCenterY right-2 z-10" src={Search} />
         </div>
@@ -46,31 +93,47 @@ export default function ManageCategory({ content }) {
 
       <table className="w-full mt-5">
         <thead>
-          <tr>
-            <th>No</th>
-            <th>Category Name</th>
-            <th>Action</th>
-          </tr>
+          <tr>{HeadTable}</tr>
         </thead>
-        <tbody>{content}</tbody>
+        <tbody>
+          {status === 'success'
+            ? dataAllCategory.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{item.name}</td>
+
+                    <td>
+                      <div className="flex items-center">
+                        <button
+                          className="w-16 h-10"
+                          onClick={() => {
+                            handleEdit(item)
+                          }}
+                        >
+                          <img className="px-5" src={Pencil} />
+                        </button>
+                        <button onClick={() => handleDelete(item._id)}>
+                          <img src={Sampah} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })
+            : 'Loading'}
+        </tbody>
       </table>
 
       <div className="flex w-full justify-end mt-3">
-        <div className="flex items-center">
-          <div className="p-3 rounded bg-green-500">
-            <img src={Left} />
-            {/* image */}
-          </div>
-          <p className="ml-4 text-gray-400 text-xl">1</p>
-          <p className="ml-4 text-gray-400 text-xl">2</p>
-          <p className="ml-4 text-gray-400 text-xl">3</p>
-          <p className="ml-4 text-gray-400 text-xl">4</p>
-          <p className="ml-4 text-gray-400 text-xl">5</p>
-          <div className="p-3 rounded bg-green-500 ml-4">
-            {/* image */}
-            <img src={Right} />
-          </div>
-        </div>
+        <Pagination
+          totalItems={dataAllSearch.totalItems}
+          page={dataAllSearch.currentPage}
+          perPage={dataAllSearch.perPage}
+          onChange={(page) => dispatch(setPage(page))}
+          onNext={(_) => dispatch(goToNextPage())}
+          onPrev={(_) => dispatch(goToPrevPage())}
+        />
       </div>
     </div>
   )

@@ -1,30 +1,51 @@
 import React from 'react'
-import Left from '../../../assets/img/admin/left.svg'
-import Right from '../../../assets/img/admin/right.svg'
-import SelectEntries from '../../../components/Global/SelectEntries'
-import InputSearch from '../../../components/Global/InputSearch'
+import IconDown from '../../../assets/img/admin/drop.svg'
+import Search from '../../../assets/img/admin/search.svg'
+import Pencil from '../../../assets/img/admin/pencil.svg'
+import Sampah from '../../../assets/img/admin/sampah.svg'
+import { Pagination } from 'upkit'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  fetchUser,
+  fetchSingleUser,
+  setKeyword,
+  setLimit,
+  setPage,
+  goToNextPage,
+  goToPrevPage,
+} from '../../../features/User/action'
+import { deleteUser } from '../../../api/user'
 
-const Title = ['No', 'Email', 'Fullname', 'Action']
+export default function ManageUser() {
+  let dispatch = useDispatch()
+  let dataAllUser = useSelector((state) => state.user.data)
+  let dataAllSearch = useSelector((state) => state.user)
 
-const data = [
-  {
-    id: 1,
-    email: 'rahmat@gmail.com',
-    fullname: 'Rahmat Kucil',
-  },
-  {
-    id: 2,
-    email: 'rahmat@gmaiffl.com',
-    fullname: 'Daus Jojon',
-  },
-  {
-    id: 3,
-    email: 'rahmat@gmail.com',
-    fullname: 'Joko SUsilo',
-  },
-]
+  console.log(dataAllUser)
+  let status = useSelector((state) => state.user.status)
+  const Title = ['No', 'Email', 'Fullname', 'Action']
 
-export default function ManageUser({ tbody }) {
+  const HeadTable = Title.map((item, index) => <th key={index}>{item}</th>)
+
+  const handleEdit = (item) => {
+    console.log('item', item)
+    dispatch(fetchSingleUser(item))
+  }
+
+  const handleDelete = (id) => {
+    dispatch(deleteUser(id))
+    dispatch(fetchUser())
+  }
+
+  React.useEffect(() => {
+    dispatch(fetchUser())
+  }, [
+    dispatch,
+    dataAllSearch.keyword,
+    dataAllSearch.limit,
+    dataAllSearch.currentPage,
+    dataAllSearch.perPage,
+  ])
   return (
     <div className="w-3/5 bg-white rounded-xl p-5 mr-3 relative">
       <div className="border-b pb-3">
@@ -33,38 +54,84 @@ export default function ManageUser({ tbody }) {
         </p>
       </div>
       <div className="flex items-center justify-between mt-8">
-        <SelectEntries />
-        <InputSearch />
+        {/* select entries */}
+        <div className="relative w-40 flex items-center">
+          <select
+            className="absolute left-0 py-2 pl-4 pr-8 text-white font-bold bg-green-500 appearance-none rounded focus:outline-none"
+            value={dataAllSearch.limit}
+            onChange={(e) => {
+              dispatch(setLimit(e.target.value))
+            }}
+          >
+            <option>Show & entries</option>
+            <option value="1">Show 1</option>
+            <option value="2">Show 2</option>
+            <option value="5">Show 5</option>
+          </select>
+          <img
+            className="right-1 absolute z-10 RealtiveCenterY pointer-events-none"
+            src={IconDown}
+          />
+        </div>
+
+        {/* search */}
+        <div className="relative w-48 flex items-center p-3">
+          <input
+            className="absolute p-2 border border-gray-200 left-0 rounded focus:outline-none"
+            placeholder="Search Product"
+            name="search"
+            value={dataAllSearch.keyword}
+            onChange={(e) => {
+              dispatch(setKeyword(e.target.value))
+            }}
+          />
+          <img className="RealtiveCenterY right-2 z-10" src={Search} />
+        </div>
       </div>
 
       <table className="w-full mt-5">
         <thead>
-          <tr>
-            <th>No</th>
-            <th>Email</th>
-            <th>Fullname</th>
-            <th>Action</th>
-          </tr>
+          <tr>{HeadTable}</tr>
         </thead>
-        {tbody}
+        <tbody>
+          {status === 'success'
+            ? dataAllUser.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{item.full_name}</td>
+                    <td>{item.email}</td>
+                    <td>
+                      <div className="flex items-center">
+                        <button
+                          className="w-16 h-10"
+                          onClick={() => {
+                            handleEdit(item)
+                          }}
+                        >
+                          <img className="px-5" src={Pencil} />
+                        </button>
+                        <button onClick={() => handleDelete(item._id)}>
+                          <img src={Sampah} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })
+            : 'Data Kosong'}
+        </tbody>
       </table>
 
       <div className="flex w-full justify-end mt-3">
-        <div className="flex items-center">
-          <div className="p-3 rounded bg-green-500">
-            <img src={Left} />
-            {/* image */}
-          </div>
-          <p className="ml-4 text-gray-400 text-xl">1</p>
-          <p className="ml-4 text-gray-400 text-xl">2</p>
-          <p className="ml-4 text-gray-400 text-xl">3</p>
-          <p className="ml-4 text-gray-400 text-xl">4</p>
-          <p className="ml-4 text-gray-400 text-xl">5</p>
-          <div className="p-3 rounded bg-green-500 ml-4">
-            {/* image */}
-            <img src={Right} />
-          </div>
-        </div>
+        <Pagination
+          totalItems={dataAllSearch.totalItems}
+          page={dataAllSearch.currentPage}
+          perPage={dataAllSearch.perPage}
+          onChange={(page) => dispatch(setPage(page))}
+          onNext={(_) => dispatch(goToNextPage())}
+          onPrev={(_) => dispatch(goToPrevPage())}
+        />
       </div>
     </div>
   )

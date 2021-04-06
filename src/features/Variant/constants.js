@@ -1,5 +1,11 @@
+export const START_FETCHING_VARIANT = 'features/Variant/START_FETCHING_VARIANT'
+export const ERROR_FETCHING_VARIANT = 'features/Variant/ERROR_FETCHING_VARIANT'
 export const SUCCESS_FETCHING_VARIANT =
   'features/Variant/SUCCESS_FETCHING_VARIANT'
-export const START_EDIT_VARIANT = 'features/Variant/START_EDIT_VARIANT'
-
-// export const START_FETCHING_VARIANT = 'features/Variant/START_FETCHING_VARIANT'
+export const START_FETCHING_SINGLE = 'features/Variant/START_FETCHING_SINGLE'
+export const SET_KEYWORD = 'features/Variant/SET_KEYWORD'
+export const SET_LIMIT = 'features/Variant/SET_LIMIT'
+export const SET_PAGE = 'features/Variant/SET_PAGE'
+export const NEXT_PAGE = 'features/Variant/NEXT_PAGE'
+export const PREV_PAGE = 'features/Variant/PREV_PAGE'
+export const SUCCESS_EDIT = 'features/Variant/SUCCESS_EDIT'

@@ -1,24 +1,52 @@
 import React, { useState } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, useHistory } from 'react-router-dom'
 import Header from '../../components/Global/Header'
 import Sidebar from '../../components/Global/Sidebar'
 import Dashboard from './Dashboard'
 import Variant from './Variant'
 import Product from './Product'
+import Discount from './Discount'
 import User from './User'
 import Category from './Category'
 import History from './History'
 import Down from '../../assets/img/admin/toggle-down.svg'
 import Close from '../../assets/img/close.svg'
 import TopToggle from '../../components/Global/TopToggle'
+import Swal from 'sweetalert2'
 
 export default function Admin() {
+  let { user } = JSON.parse(localStorage.getItem('auth'))
+  console.log('User', user.role)
+  const history = useHistory()
   const [toggle, setToggle] = useState(true)
 
   const toggler = () => {
     toggle ? setToggle(false) : setToggle(true)
   }
-  return (
+  return user.role === 'user' ? (
+    <div>
+      {' '}
+      {/* anda bukan admin{' '} */}
+      {
+        (Swal.fire({
+          title: 'Anda bukan admin',
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown',
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOutUp',
+          },
+        }),
+        history.push('/login'))
+      }
+    </div>
+  ) : (
+    // (
+
+    // history.push('/login')
+
+    // )
+    // )
     <div className="relative w-screen h-screen overflow-hidden">
       <Header
         TopElement={
@@ -49,6 +77,9 @@ export default function Admin() {
         </Switch>
         <Switch>
           <Route path="/admin/variant" component={Variant} />
+        </Switch>
+        <Switch>
+          <Route path="/admin/discount" component={Discount} />
         </Switch>
         <Switch>
           <Route path="/admin/product" component={Product} />

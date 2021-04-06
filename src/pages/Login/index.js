@@ -26,8 +26,8 @@ export default function Index() {
 
   const [errordata, seterrordata] = useState()
 
-  console.log('errordata')
-  console.log(errordata)
+  console.log('index page login')
+  // console.log(errordata)
 
   //fungsi menangani form submit
   const onSubmit = async ({ email, password }) => {
@@ -36,31 +36,24 @@ export default function Index() {
 
     //kirim data ke web API  menggunakan helper 'login'
     let { data } = await login(email, password)
+    // console.log('data acount', data)
 
-    //cek apakah server mengembalikan error
+    // cek apakah server mengembalikan error
     if (data.error) {
-      console.log('data eror')
-      // console.log('data errorrr')
-      // console.log(data)
-      //tangani eror bertipe 'invalidCredential'
-      // setError('password', { type: 'invalidCredential', message: data.message })
       seterrordata(data.message)
-
-      //set status menjadi error
       setStatus(statusList.error)
     } else {
-      // jika berhasil login
-
-      // ambil data 'user' dan `token` dari respon server
       let { user, token } = data
-
-      //dispatch ke redux store, action 'userlogin' dengan data 'user' dan 'token'
-      dispatch(userLogin(user, token))
-      history.push('/admin')
-
-      //redirect ke halaman home user dashboard
+      if (user.role === 'user') {
+        dispatch(userLogin(user, token))
+        history.push('/')
+      } else {
+        dispatch(userLogin(user, token))
+        history.push('/admin')
+      }
+      // dispatch(userLogin(user, token))
+      // history.push('/admin')
     }
-    console.log('data', data)
     setStatus(statusList.success)
   }
 

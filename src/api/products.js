@@ -20,7 +20,7 @@ export async function getSingleProduct(id) {
     ? JSON.parse(localStorage.getItem('auth'))
     : {}
 
-  return await axios.get(`${config.api_host}/api/products${id}`, {
+  return await axios.get(`${config.api_host}/api/products/${id}`, {
     headers: {
       authorization: `Bearer ${token}`,
     },
@@ -41,12 +41,12 @@ export async function createProduct(data) {
   })
 }
 
-export async function updateProduct(id) {
+export async function updateProduct(data, idsingle) {
   let { token } = localStorage.getItem('auth')
     ? JSON.parse(localStorage.getItem('auth'))
     : {}
 
-  return await axios.put(`${config.api_host}/api/products/${id}`, {
+  return await axios.put(`${config.api_host}/api/products/${idsingle}`, data, {
     headers: {
       authorization: `Bearer ${token}`,
     },

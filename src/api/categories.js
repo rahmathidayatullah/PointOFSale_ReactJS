@@ -2,27 +2,6 @@ import axios from 'axios'
 
 import { config } from '../config'
 
-// export async function createCategory(name) {
-//   let { token } = localStorage.getItem('auth')
-//     ? JSON.parse(localStorage.getItem('auth'))
-//     : {}
-
-//   try {
-//     const post = await axios.post(
-//       `${config.api_host}/api/categories`,
-//       { name: name },
-//       {
-//         headers: {
-//           authorization: `Bearer ${token}`,
-//         },
-//       },
-//     )
-//     console.log('POST', post)
-//   } catch (error) {
-//     console.log(error.response)
-//   }
-// }
-
 export async function getAllCategory(params) {
   let { token } = localStorage.getItem('auth')
     ? JSON.parse(localStorage.getItem('auth'))
@@ -36,7 +15,7 @@ export async function getAllCategory(params) {
   })
 }
 
-export async function getSinglecategoryy(id) {
+export async function getSinglecategory(id) {
   let { token } = localStorage.getItem('auth')
     ? JSON.parse(localStorage.getItem('auth'))
     : {}
@@ -68,57 +47,21 @@ export const deleteCategory = (id) => {
     }
   }
 }
-export const editCategory = async (id, data) => {
-  // let { token } = localStorage.getItem('auth')
-  //   ? JSON.parse(localStorage.getItem('auth'))
-  //   : {}
-  // return async () => {
-  //   try {
-  //     const edit = await axios.put(
-  //       `${config.api_host}/api/categories/${id}`,
-  //       { data },
-  //       {
-  //         headers: {
-  //           authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     )
-  //     console.log('RESPONSE EDIT', edit)
-  //   } catch (error) {
-  //     console.log(error.response)
-  //   }
-  // }
+export const editCategory = async (data, datasingle) => {
   let { token } = localStorage.getItem('auth')
     ? JSON.parse(localStorage.getItem('auth'))
     : {}
 
-  return await axios.put(`${config.api_host}/api/categories/${id}`, data, {
-    headers: {
-      authorization: `Bearer ${token}`,
+  return await axios.put(
+    `${config.api_host}/api/categories/${datasingle}`,
+    data,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     },
-  })
+  )
 }
-
-// export async function deleteCategory(id) {
-//   let { token } = localStorage.getItem('auth')
-//     ? JSON.parse(localStorage.getItem('auth'))
-//     : {}
-
-//   return await axios
-//     .delete(`${config.api_host}/api/categories/${id}`, {
-//       headers: {
-//         authorization: `Bearer ${token}`,
-//       },
-//     })
-//     .then((res) => {
-//       console.log('res')
-//       console.log(res)
-//       window.location.reload(false)
-//     })
-//     .catch((err) => {
-//       console.log(err.response)
-//     })
-// }
 
 export async function createCategory(data) {
   let { token } = localStorage.getItem('auth')
@@ -130,7 +73,4 @@ export async function createCategory(data) {
       authorization: `Bearer ${token}`,
     },
   })
-  // .then((res) => {
-  //   getAllCategory()
-  // })
 }

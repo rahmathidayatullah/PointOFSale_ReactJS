@@ -2,12 +2,13 @@ import {
   START_FETCHING_CATEGORY,
   ERROR_FETCHING_CATEGORY,
   SUCCESS_FETCHING_CATEGORY,
-  SET_PAGE,
+  START_FETCHING_SINGLE,
   SET_KEYWORD,
+  SET_LIMIT,
+  SET_PAGE,
   NEXT_PAGE,
   PREV_PAGE,
-  DELETE_ITEM,
-  START_EDIT_CATEGORY,
+  SUCCESS_EDIT,
 } from './constants'
 
 const statuslist = {
@@ -16,65 +17,45 @@ const statuslist = {
   success: 'success',
   error: 'error',
 }
-
 const initialState = {
   data: [],
   currentPage: 1,
   totalItems: -1,
-  perPage: 6,
+  perPage: 10,
   keyword: '',
   status: statuslist.idle,
   datasingle: {},
+  limit: '',
+  statusedit: 'add',
 }
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    // tangani `START_FETCHING_CATEGORY`
     case START_FETCHING_CATEGORY:
       return { ...state, status: statuslist.process }
 
-    case START_EDIT_CATEGORY:
-      return { ...state, datasingle: action.data }
-
-    // tangani `ERROR_FETCHING_CATEGORY`
-    case ERROR_FETCHING_CATEGORY:
-      return { ...state, status: statuslist.error }
-
-    // tangani `SUCCESS_FETCHING_CATEGORY`
     case SUCCESS_FETCHING_CATEGORY:
       return {
         ...state,
         status: statuslist.success,
         data: action.data,
-
-        // totalItems: action.count,
+        totalItems: action.count,
       }
 
-    // tangani `SUCCESS_FETCHING_CATEGORY`
-    case DELETE_ITEM:
-      // return {
+    case ERROR_FETCHING_CATEGORY:
+      return { ...state, status: statuslist.error }
 
-      //   // totalItems: action.count,
-      // }
+    case START_FETCHING_SINGLE:
+      return { ...state, datasingle: action.item, statusedit: 'edit' }
 
-      return {
-        ...state,
-        data: action.data,
-      }
+    case SET_KEYWORD:
+      return { ...state, keyword: action.keyword }
 
-    // case REMOVE_ITEM:
-    //   return state
-    //     .map((item) => ({
-    //       ...item,
-    //       qty: item._id === action.item._id ? item.qty - 1 : item.qty,
-    //     }))
-    //     .filter((item) => item.qty > 0)
+    case SET_LIMIT:
+      return { ...state, perPage: action.limit }
 
     case SET_PAGE:
       return { ...state, currentPage: action.currentPage }
-
-    case SET_KEYWORD:
-      return { ...state, keyword: action.keyword, tags: [] }
 
     case NEXT_PAGE:
       return { ...state, currentPage: state.currentPage + 1 }
@@ -82,6 +63,8 @@ export default function reducer(state = initialState, action) {
     case PREV_PAGE:
       return { ...state, currentPage: state.currentPage - 1 }
 
+    case SUCCESS_EDIT:
+      return { ...state, statusedit: 'add' }
     default:
       return state
   }

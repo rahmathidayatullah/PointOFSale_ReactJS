@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Home from './pages/User'
 import Admin from './pages/Admin'
@@ -9,14 +9,17 @@ import './styles/index.css'
 import { Provider } from 'react-redux'
 import store from './app/store'
 import GuardRoute from './components/GuardRoute/Index'
+import { getCart } from './api/cart'
 
 // import fungsi listen
-import { listen } from './app/listener'
+import { listen } from './app/Listener'
 
 function App() {
   // panggil fungsi listen() sekali saja saat komponen selesai render pertama kali
   React.useEffect(() => {
     listen()
+    getCart()
+    // console.log('app file listen()')
   }, [])
   return (
     <Provider store={store}>

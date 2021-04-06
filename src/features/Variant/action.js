@@ -1,64 +1,124 @@
 import debounce from 'debounce-promise'
 
-import { SUCCESS_FETCHING_VARIANT, START_EDIT_VARIANT } from './constants'
-import { getAllVariant, getSinglevariant } from '../../api/variants'
-// import { successFetchingVariant } from '../Category/action'
+import {
+  START_FETCHING_VARIANT,
+  ERROR_FETCHING_VARIANT,
+  SUCCESS_FETCHING_VARIANT,
+  START_FETCHING_SINGLE,
+  SET_KEYWORD,
+  SET_LIMIT,
+  SET_PAGE,
+  NEXT_PAGE,
+  PREV_PAGE,
+  SUCCESS_EDIT,
+} from './constants'
 
-let debouncedFetchVariant = debounce(getAllVariant, 1)
+import { getAllVariant, editVariant } from '../../api/variants'
+
+let debouncedFetchVariant = debounce(getAllVariant, 1000)
 
 export const fetchVariant = () => {
   return async (dispatch, getState) => {
-    // dispatch(startFetchingVariant())
-    let perPage = getState().category.perPage || 9
-    let currentPage = getState().category.currentPage || 1
-    let keyword = getState().category.keyword || ''
+    dispatch(startFetchingVariant())
+
+    let keyword = getState().variant.keyword || ''
+    let limit = getState().variant.limit || ''
+    let perPage = getState().variant.perPage || 1
+    let currentPage = getState().variant.currentPage || 1
 
     const params = {
-      limit: perPage,
-      skip: currentPage * perPage - perPage,
       q: keyword,
+      limit: limit === '' ? perPage : limit,
+      skip: currentPage * perPage - perPage,
     }
 
     try {
+      console.log('dataaaaa cek')
       let {
-        data: { data },
+        data: { data, count },
       } = await debouncedFetchVariant(params)
-      dispatch(successFetchingVariant(data))
+      console.log('data', data)
+      dispatch(successFetchingVariant({ data, count }))
     } catch (error) {
       console.log(error)
     }
   }
 }
 
-export const getSingleVariantt = (item) => {
-  let id = item._id
-  return async (dispatch, getstate) => {
+export const fetchingEditvariant = (dataCategory, id) => {
+  return async (dispatch, getState) => {
     try {
-      let { data } = await getSinglevariant(id)
-      console.log('data from action', data)
-      dispatch(startEditVariant(data))
+      let { datar } = await editVariant(dataCategory, id)
+      console.log('datar', datar)
+
+      dispatch(succesEdit())
     } catch (error) {
-      console.log(error)
+      console.log('respon', error)
     }
   }
 }
 
-export const startEditVariant = (data) => {
+export const succesEdit = () => {
   return {
-    type: START_EDIT_VARIANT,
-    data,
+    type: SUCCESS_EDIT,
   }
 }
 
-// export const startFetchingVariant = () => {
-//   return {
-//     type: START_FETCHING_VARIANT,
-//   }
-// }
+export const fetchSingleVariant = (item) => {
+  return {
+    type: START_FETCHING_SINGLE,
+    item,
+  }
+}
 
-export const successFetchingVariant = (data) => {
+export const startFetchingVariant = () => {
+  return {
+    type: START_FETCHING_VARIANT,
+  }
+}
+
+export const successFetchingVariant = (payload) => {
   return {
     type: SUCCESS_FETCHING_VARIANT,
-    data,
+    ...payload,
+  }
+}
+
+export const errorFetchingVariant = () => {
+  return {
+    type: ERROR_FETCHING_VARIANT,
+  }
+}
+
+export const setKeyword = (keyword) => {
+  return {
+    type: SET_KEYWORD,
+    keyword,
+  }
+}
+
+export const setLimit = (limit) => {
+  return {
+    type: SET_LIMIT,
+    limit,
+  }
+}
+
+export const setPage = (number = 1) => {
+  return {
+    type: SET_PAGE,
+    currentPage: number,
+  }
+}
+
+export const goToNextPage = () => {
+  return {
+    type: NEXT_PAGE,
+  }
+}
+
+export const goToPrevPage = () => {
+  return {
+    type: PREV_PAGE,
   }
 }
